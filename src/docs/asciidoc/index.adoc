@@ -12,6 +12,7 @@ endif::[]
 :sectnums:
 :sectlinks:
 :sectanchors:
+:docinfo: shared-head
 
 [[api]]
 == Find Customer's Starbucks card list
