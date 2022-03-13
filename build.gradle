@@ -43,6 +43,7 @@ dependencies {
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'      // for REST Doc (asciidoctor)
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'             // for REST Doc
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }
 
 /**
