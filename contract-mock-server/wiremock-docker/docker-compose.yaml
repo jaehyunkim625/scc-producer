@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  customer-api:
+    image: wiremock/wiremock:2.32.0
+    container_name: customer-api
+    ports:
+      - "8081:8080"
+    command:
+      - "--global-response-templating"
+    volumes:
+      - ./wiremock-docker-stub/customer-api:/home/wiremock
+  notification-api:
+    image: wiremock/wiremock:2.32.0
+    container_name: notification-api
+    ports:
+      - "8082:8080"
+    command:
+      - "--global-response-templating"
+    volumes:
+      - ./wiremock-docker-stub/notification-api:/home/wiremock
+  sbcard-api:
+    image: wiremock/wiremock:2.32.0
+    container_name: sbcard-api
+    ports:
+      - "8083:8080"
+    command:
+      - "--global-response-templating"
+    volumes:
+      - ./wiremock-docker-stub/sbcard-api:/home/wiremock

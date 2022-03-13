@@ -1,0 +1,100 @@
+import org.springframework.cloud.contract.verifier.config.TestFramework
+
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'groovy'
+    id 'idea'
+    id 'org.springframework.boot' version '2.6.4'
+    id 'org.springframework.cloud.contract' version '3.1.1'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'                // asciidoc 파일을 변환해서, build 폴더에 복사해주는 플러그인
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+ext {
+    springCloudVersion = '2021.0.0'                                 // spring cloud version (Spring Boot 2.6.x compatibility)
+    snippetsDir = file('build/generated-snippets')                  // for REST Doc snippets ( test성공시 .adoc file들이 생성되는 디렉토리)
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'com.example.scc'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    asciidoctorExtensions   // for REST Doc extension
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.projectlombok:lombok'
+
+//    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+//        exclude group: 'junit', module: 'junit;'
+//    }
+//    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+//    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier' // for SCC producer
+
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'      // for REST Doc (asciidoctor)
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'             // for REST Doc
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+}
+
+/**
+ * gradle build 시 아래와 같은 순서로 진행
+ * compileJava > test > contractTestClasses > contractTest > asciidoctor > bootJar > copyDocument > build
+ * test성공후, 생성된 snippet .adoc파일들을 묶어 html api문서로 만들기 위해서 gradle인 경우 src/docs/asciidoc 하위에 adoc 파일을 만들어줘야한다
+ * */
+
+test {
+    useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+contracts {
+//    testMode = 'EXPLICIT'
+    testFramework = TestFramework.JUNIT5
+    packageWithBaseClasses = 'com.example.scc.producer'   // 사용 할 Base 클래스 패키지 위치
+}
+contractTest {
+    dependsOn test
+    useJUnitPlatform()
+}
+asciidoctor {
+    dependsOn contractTest
+    configurations 'asciidoctorExtensions'
+    inputs.dir snippetsDir
+    asciidoctor.doFirst {
+        delete file('src/main/resources/static/docs')    // 먼저 기존에 생성되었던 API docs를 삭제
+    }
+}
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from "${asciidoctor.outputDir}"                 // asciidoctor.outputDir -> build/docs/asciidoc (asciidoctor가 adoc파일들을 html로 작성한 output폴더)
+        into 'BOOT-INF/classes/static/docs'             // html 파일이 jar 안의 BOOT-INF/classes/static/docs 폴더로 복사됨
+    }
+}
+build {
+    task copyDocument(type: Copy) {
+        dependsOn asciidoctor
+        from file("build/docs/asciidoc")
+        into file("src/main/resources/static/docs")
+    }
+    dependsOn copyDocument
+}

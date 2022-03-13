@@ -1,0 +1,26 @@
+// API Doc base template for generating HTML file
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= Starbuck Card RESTful API Guide
+:doctype: Starbucks Card
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectnums:
+:sectlinks:
+:sectanchors:
+
+[[api]]
+== Find Customer's Starbucks card list
+고객이 소유한 스타벅스카드의 리스트와 카드상태를 조회
+
+=== Request Sample
+include::{snippets}/FindCardsTest/http-request.adoc[]
+include::{snippets}/FindCardsTest/curl-request.adoc[]
+=== Response Sample
+include::{snippets}/FindCardsTest/http-response.adoc[]
+
+

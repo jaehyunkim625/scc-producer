@@ -1,0 +1,13 @@
+{
+  "request":{
+    "urlPattern":"/notification/v1/templates/1",
+    "method":"GET"
+  },
+  "response":{
+    "status":200,
+    "headers":{
+      "Content-Type":"application/json"
+    },
+    "body":"{ \"template_id\" : \"template001\", \"template_name\" : \"egift_MMS\" }"
+  }
+}
