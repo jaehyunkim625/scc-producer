@@ -29,6 +29,7 @@
 ### Contract를 기반으로 생성된 Subbing용 json or jar 파일은 wiremock을 엔진베이스로 
 ### 로컬 Standalone 혹은 k8s서비스 형태(Helm)로 공개되어 Consumer Side에서 컨트랙트 테스트용으로 사용되는 것을 시나리오로 함
 
+
 ### Reference Documentation
 
 * [Spring Cloud Contract Reference Documentation](https://docs.spring.io/spring-cloud-contract/docs/current/reference/html/)
