@@ -62,14 +62,20 @@ contracts {
     packageWithBaseClasses = 'com.example.scc.producer'   // 사용 할 Base 클래스 패키지 위치
 
     contractDependency {
-        stringNotation = "com.example.scc:contract:0.0.1-SNAPSHOT"
+//        stringNotation = "com.example.scc:contract:0.0.1-SNAPSHOT"
+//        stringNotation = "contracts.sbcard.findCard"
+//        stringNotation = "${project.group}:${project.name}:${project.version}"
     }
 
-//    contractsPath = '*'
+    contractsPath = "../${project.rootDir}/scc-contract"
+
 
     contractRepository {
-        repositoryUrl = "git://https://github.com/jaehyunkim625/scc-contract.git"
-        contractsMode = "REMOTE"
+//        repositoryUrl = "git://https://github.com/jaehyunkim625/scc-contract.git"
+//        repositoryUrl = "git://file://${new File("../${project.rootDir}", "scc-contract")}/src/contractTest"
+        repositoryUrl = "git://file://${new File(project.rootDir, "../scc-contract")}/build/"
+        contractsMode = "LOCAL"
+
     }
 
 
