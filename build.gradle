@@ -60,6 +60,20 @@ contracts {
 //    testMode = 'EXPLICIT'
     testFramework = TestFramework.JUNIT5
     packageWithBaseClasses = 'com.example.scc.producer'   // 사용 할 Base 클래스 패키지 위치
+
+    contractDependency {
+        stringNotation = "com.example.scc:contract:0.0.1-SNAPSHOT"
+    }
+
+//    contractsPath = '*'
+
+    contractRepository {
+        repositoryUrl = "git://https://github.com/jaehyunkim625/scc-contract.git"
+        contractsMode = "REMOTE"
+    }
+
+
+
 }
 contractTest {
     dependsOn test
